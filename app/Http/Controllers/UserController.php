@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return "User Index";
+        $users = User::orderBy('name')->paginate(20);
+
+        return response()->json($users);
     }
 
     public function store()

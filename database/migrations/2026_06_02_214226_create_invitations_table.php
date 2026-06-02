@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('invitations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('client_email');
-            $table->string('name');
-            $table->text('description')->nullable();
+            $table->string('collaborator_email');
+            $table->string('token')->unique();
+            $table->enum('status', ['pending', 'accepted', 'expired'])->default('pending');
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('invitations');
     }
 };

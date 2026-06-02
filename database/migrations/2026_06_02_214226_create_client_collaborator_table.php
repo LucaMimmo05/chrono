@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('collaborator_project', function (Blueprint $table) {
+        Schema::create('client_collaborator', function (Blueprint $table) {
             $table->id();
             $table->foreignId('collaborator_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->enum('rate_type', ['hourly', 'fixed'])->nullable();
-            $table->decimal('rate', 10, 2)->nullable();
+            $table->foreignId('client_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('client_email');
+            $table->enum('default_rate_type', ['hourly', 'fixed'])->nullable();
+            $table->decimal('default_rate', 10, 2)->nullable();
             $table->timestamps();
 
-            $table->unique(['collaborator_id', 'project_id']);
+            $table->unique(['collaborator_id', 'client_email']);
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('collaborator_project');
+        Schema::dropIfExists('client_collaborator');
     }
 };
